@@ -15,33 +15,36 @@
 
 <body>
     <div class="container">
-        <form>
-
-            <div class="uploader">
-                <div class="wrapper">
-                    <div class="images">
-                        <div class="pic" id="pic">
-                            Додати файли (натисніть або перетягніть)
+            <form class="row">
+                <div class="col-md-4">
+                    <div class="uploader">
+                        <div class="wrapper">
+                            <div class="images">
+                                <div class="pic" id="pic">
+                                    Додати файли (натисніть або перетягніть)
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="filesContainer">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Файл</th>
-                            <th>Ім'я</th>
-                            <th>Розмір</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyFileList">
-                    </tbody>
-                </table>
-            </div>
-        </form>
-    </div>
+                <div class="col-md-8">
+                    <div id="filesContainer">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Файл</th>
+                                    <th>Ім'я</th>
+                                    <th>Розмір</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyFileList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

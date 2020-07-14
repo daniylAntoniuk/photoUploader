@@ -24,12 +24,11 @@
                 let uploader = $('<input type="file" name="images[]" style="display:none"/>');
 
                 uploader[0].files = files;
-                console.log(uploader);
+                //console.log(uploader);
 
                 viewFileUploader(uploader);
             }
         }
-
 
         //загрузка фото на клік
         function uploadImage() {
@@ -50,12 +49,9 @@
             images.on('click', '.img', function () {
                 $(this).remove();
             });
-
-
         }
 
         function viewFileUploader(uploader) {
-            //console.log($(this)[0].value);
 
             var nBytes = uploader[0].files[0].size;
             var sOutput = nBytes + " bytes";
@@ -65,7 +61,6 @@
             }
 
             var type = uploader[0].files[0].type;
-            console.log("sssd", type);
             let fileTypes = {
                 'wordprocessingml.document': '<i class="fa fa-2x fa-file-word-o text-primary"></i>',
                 'spreadsheetml.sheet': '<i class="fa fa-2x fa-file-excel-o text-success"></i>',
@@ -85,21 +80,15 @@
                 }
                 if (key == 'default')
                     type = value;
-                //console.log("----------", `${key}: ${value}`);
             }
-            
-            let fileInfo = {
-                name: uploader[0].files[0].name,
-                size: sOutput
-            };
 
             let tr = $(`
             <tr>
                 <td>
                 	${type}
                 </td>
-                <td>${fileInfo.name}</td>
-                <td>${fileInfo.size}</td>
+                <td>${uploader[0].files[0].name}</td>
+                <td>${sOutput}</td>
                 <td><a href="#" class="btn btn-danger removefile"><i class="fa fa-times" aria-hidden="true"></i></a></td>
             </tr>
             `);
