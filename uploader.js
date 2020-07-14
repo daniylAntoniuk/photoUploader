@@ -1,78 +1,112 @@
 ﻿(function ($) {
     $(document).ready(function () {
-        let dropArea = document.getElementById('pic');
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false)
-        })
-
-        function preventDefaults(e) {
-            e.preventDefault()
-            e.stopPropagation()
-        }
-        dropArea.addEventListener('drop', handleDrop, false)
-        console.log(dropArea);
-        function handleDrop(e) {
-            let dt = e.dataTransfer
-            let files = dt.files
-            let uploader = $('<input type="file" name="images[]" style="display:none"/>');
-
-            uploader[0].files = files;
-            console.log(uploader);
-            let divFile = $(`
-                    <div style="margin-bottom:10px">
-                        ${files[0].name}
-                        <button class="removefile" style="margin-left:10px">REMOVE</button>
-                    </div>`);
-            divFile.prepend(uploader);
-            $("#filesContainer").prepend(divFile);
-
-        }
 
         //загрузка фото на клік
         uploadImage();
+        dropAreaView();
+
+        //Облок для перетягування
+        function dropAreaView() {
+            let dropArea = document.getElementById('pic');
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false)
+            })
+
+            function preventDefaults(e) {
+                e.preventDefault()
+                e.stopPropagation()
+            }
+            dropArea.addEventListener('drop', handleDrop, false)
+            //console.log(dropArea);
+            function handleDrop(e) {
+                let dt = e.dataTransfer
+                let files = dt.files
+                let uploader = $('<input type="file" name="images[]" style="display:none"/>');
+
+                uploader[0].files = files;
+                console.log(uploader);
+
+                viewFileUploader(uploader);
+            }
+        }
+
 
         //загрузка фото на клік
         function uploadImage() {
             let button = $('.images .pic');
-
             let images = $('.images');
-
             button.on('click', function () {
-
-
                 let uploader = $('<input type="file" name="images[]" style="display:none"/>');
-
                 uploader.click();
+
                 uploader.on('change', function () {
-                    console.log($(this)[0].value);
-                    let divFile = $(`
-                    <div style="margin-bottom:10px">
-                        ${uploader[0].files[0].name}
-                        <button class="removefile" style="margin-left:10px">REMOVE</button>
-                    </div>`);
-                    divFile.prepend(uploader);
-                    $("#filesContainer").prepend(divFile);
-                    //console.log("------file-------", uploader.files[0]);
-                    //$("#filesContainer").prepend(uploader);
-                    // let reader = new FileReader();
-                    // reader.onload = function (event) {
-
-                    //     dialogCropper.modal('show');
-                    //     cropper.replace(event.target.result);
-                    //     uploader.remove();
-                    //     //
-                    // };
-                    // reader.readAsDataURL(uploader[0].files[0]);
-
+                    viewFileUploader(uploader);
                 });
             });
-            $("#filesContainer").on("click", ".removefile", function () {
-                $(this).closest("div").remove();
+            $("#tbodyFileList").on("click", ".removefile", function () {
+                $(this).closest("tr").remove();
             });
 
             images.on('click', '.img', function () {
                 $(this).remove();
             });
+
+
+        }
+
+        function viewFileUploader(uploader) {
+            //console.log($(this)[0].value);
+
+            var nBytes = uploader[0].files[0].size;
+            var sOutput = nBytes + " bytes";
+            // optional code for multiples approximation
+            for (var aMultiples = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+                sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple];
+            }
+
+            var type = uploader[0].files[0].type;
+            console.log("sssd", type);
+            let fileTypes = {
+                'wordprocessingml.document': '<i class="fa fa-2x fa-file-word-o text-primary"></i>',
+                'spreadsheetml.sheet': '<i class="fa fa-2x fa-file-excel-o text-success"></i>',
+                'presentationml.presentation': '<i class="fa fa-2x fa-file-powerpoint-o text-danger"></i>',
+                'image': '<i class="fa fa-2x  fa-file-image-o text-warning"></i>',
+                'pdf': '<i class="fa fa-2x fa-file-pdf-o text-danger"></i>',
+                'compressed': '<i class="fa fa-2x fa-file-archive-o text-muted"></i>',
+                'video': '<i class="fa fa-2x fa-file-video-o"></i>',
+                'text': '<i class="fa fa-2x fa-file-text-o"></i>',
+                'default': '<i class="fa fa-2x fa-file"></i>',
+            };
+
+            for (const [key, value] of Object.entries(fileTypes)) {
+                if (type.includes(key)) {
+                    type = value;
+                    break;
+                }
+                if (key == 'default')
+                    type = value;
+                //console.log("----------", `${key}: ${value}`);
+            }
+            
+            let fileInfo = {
+                name: uploader[0].files[0].name,
+                size: sOutput
+            };
+
+            let tr = $(`
+            <tr>
+                <td>
+                	${type}
+                </td>
+                <td>${fileInfo.name}</td>
+                <td>${fileInfo.size}</td>
+                <td><a href="#" class="btn btn-danger removefile"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+            </tr>
+            `);
+            tr.prepend(uploader);
+
+            $("#tbodyFileList").prepend(tr);
+
         }
     });
 })(jQuery);
